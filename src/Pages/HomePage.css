@@ -1,0 +1,77 @@
+.topBar
+{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    padding-top: 10px;
+    border-bottom: #332C23 solid 5px;
+}
+
+*
+{
+    background-color: #FFFFF3;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.searchBar
+{
+    font-size: 16px;
+    line-height: 50px;
+}
+
+.logo
+{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.link
+{
+    background-color: #332C23;
+    color: #FFFFF3;
+    border-radius: 1rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    line-height: 20px;
+    height: 20px;
+}
+
+.product
+{
+    margin: 150px;
+    background-color: #332C23;
+    text-align: center;
+    justify-content: center;
+    width: 300px;
+    height: 375px;
+    border-radius: 2rem;
+}
+
+.tee
+{
+    height: 250px;
+    margin-top: 20px;
+}
+
+.price
+{
+    background-color: #332C23;
+    color: #FFFFF3;
+}
+
+footer
+{
+    background-color: #332C23;
+    line-height: 65px;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+}
+
+.footer
+{
+    background-color: #332C23;
+    color: #FFFFF3;
+    margin-left: 30px;
+}
