@@ -46,6 +46,7 @@
     width: 300px;
     height: 375px;
     border-radius: 2rem;
+    
 }
 
 .tee
@@ -74,4 +75,6 @@ footer
     background-color: #332C23;
     color: #FFFFF3;
     margin-left: 30px;
+    display: none
 }
+

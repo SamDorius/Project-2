@@ -1,8 +1,8 @@
-import sequelize, { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import util from 'util';
 import connectToDB from './db.js';
 
-const db = await connectToDB('postgresql:///shop');
+export const db = await connectToDB('postgresql:///shop');
 
 export class Customer extends Model 
 {
@@ -79,6 +79,11 @@ Item.init(
             autoIncrement: true,
             allowNull: false
         },
+        itemName:
+        {
+            type: DataTypes.STRING(200),
+            allowNull: false
+        },
         itemType:
         {
             type: DataTypes.STRING(200),
@@ -96,6 +101,16 @@ Item.init(
         description:
         {
             type: DataTypes.STRING(400)
+        },
+        imageUrl:
+        {
+            type: DataTypes.STRING(500),
+            allowNull: false
+        },
+        isEditing:
+        {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     },
     {
@@ -154,48 +169,5 @@ Sale.belongsTo(Customer, { foreignKey: "customerId" })
 
 Item.hasMany(Sale, { foreignKey: "itemId" })
 Sale.belongsTo(Item, { foreignKey: "itemId" })
-
-
-await db.sync({ force: true })
-
-
-// seeding database with test data
-
-await Customer.bulkCreate
-(
-    [
-        {email: 'yahtzee@go.com', password: 'password'},
-        {email: 'example@gmail.com', password: 'yeah'},
-        {email: 'example1@go.com', password: 'example'}
-    ]
-)
-
-await Item.bulkCreate
-(
-    [
-        {itemType: "long sleeve", price: 25, available: true, description: "white long sleeve tee with cross design"},
-        {itemType: "example", price: 0, available: false, description: "example example example"},
-        {itemType: "t shirt", price: 300}
-    ]
-)
-
-await Cart.bulkCreate
-(
-    [
-        {customerId: 2, itemId: 1},
-        {customerId: 2, itemId: 2}
-    ]
-)
-
-await Sale.bulkCreate
-(
-    [
-        {customerId: 1, itemId: 3, price: 300, date: 2023-2-13},
-        {customerId: 1, itemId: 2, price: 0, date: 2023-8-8}
-    ]
-)
-
-
-await db.close()
 
 export default db

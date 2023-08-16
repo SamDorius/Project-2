@@ -9,13 +9,13 @@ import SignUp from './Pages/SignUp'
 import CheckOut from './Pages/CheckOut'
 
 
-function App() {
+function App({items}) {
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home/>}></Route>
+          <Route path="/" element={<Home items={items}/>}></Route>
           <Route path="/login" element={<LogIn/>}></Route>
           <Route path="/cart" element={<ShoppingCart/>}></Route>
           <Route path="/product" element={<Product/>}></Route>
