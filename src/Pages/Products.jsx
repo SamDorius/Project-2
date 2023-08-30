@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useState } from "react"
 import axios from "axios"
 
@@ -13,8 +13,10 @@ import EditableAvailableCell from "../Admin_Features/EditableAvailableCell"
 
 export default function Products({item, onDeleteClick})
 {
+    const dispatch = useDispatch()
 
     const isAdmin = useSelector((state) => state.message)
+    const email = useSelector((state) => state.email)
 
 
     const [isEditing, setIsEditing] = useState(item.isEditing)
@@ -30,13 +32,11 @@ export default function Products({item, onDeleteClick})
 
     const setNormalMode = async () =>
     {
-        console.log(item)
         const {data} = await axios.post(`/api/shop/item/${item.itemId}`, 
         {
             itemName, itemType, imageUrl, price, available, description
         })
 
-        console.log(data)
         if (!data.error)
         {
             setName(data.itemName)
@@ -48,7 +48,18 @@ export default function Products({item, onDeleteClick})
         }
 
         setIsEditing(false)
-        console.log(name)
+    }
+
+    const addToCart = async () =>
+    {
+        let user = {email: email}
+
+        const {data} = await axios.post(`/api/cart/addItem/${item.itemId}`, user)
+    }
+
+    const clickDetails = () =>
+    {
+        dispatch({'type': 'SET_ITEM', 'payload': item})
     }
     
 
@@ -79,8 +90,11 @@ export default function Products({item, onDeleteClick})
             <div className="product">
                 <h3 className="price">{item.itemName}</h3>
                 <img className="tee" src={item.imageUrl}/>
-                <h3 className="price">Price: {item.price}</h3>
-                <Link className="link" to="/product">Details</Link>
+                <h3 className="price">Price: $ {item.price}.00</h3>
+                <Link onClick={clickDetails} className="link" to="/product">Details</Link>
+                { isAdmin === 'user logged in' &&
+                    <button className="addToCart" onClick={addToCart}>Add to cart</button>
+                }
             </div> 
         }
 

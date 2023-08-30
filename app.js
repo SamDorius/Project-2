@@ -1,7 +1,7 @@
 import express, { text } from 'express';
 import morgan from 'morgan';
 import ViteExpress from 'vite-express';
-import { Customer, Item } from './database/model.js';
+import { Customer, Item, Cart, Card } from './database/model.js';
 import bcrypt from "bcrypt"
 
 const app = express()
@@ -53,8 +53,11 @@ ViteExpress.config({printViteDevServerHost: true})
 
 app.get('/api/shop/items', async (req, res) =>
 {
-    res.json(ITEMS)
+    let items = await Item.findAll()
+    res.json(items)
 })
+
+// admin permission routes
 
 app.post('/api/shop/item', async (req, res) =>
 {
@@ -76,13 +79,17 @@ app.post('/api/shop/item', async (req, res) =>
     res.json(newItem)
 })
 
-app.post('/api/shop/item/delete/:id', (req, res) =>
+app.post('/api/shop/item/delete/:id', async (req, res) =>
 {
     const {id} = req.params
 
-    const index = ITEMS.findIndex((e) => e.id === +id)
+    const index = ITEMS.findIndex((e) => e.itemId === +id)
 
     ITEMS.splice(index, 1)
+
+    const dbItem = await Item.findByPk(id)
+
+    await dbItem.destroy()
 
     res.json({id: +id})
 })
@@ -96,51 +103,50 @@ app.post('/api/shop/item/:id', async (req, res) =>
     const index = ITEMS.findIndex((e) => e.itemId === +id)
 
     const item = ITEMS[index]
-    console.log(`here` + index)
-    console.log(item)
+    
 
     const dbItem = await Item.findByPk(id)
+    
 
     if (itemName)
     {
-        dbItem.itemName = item.itemName ?? dbItem.itemName
+        dbItem.itemName = itemName ?? dbItem.itemName
+        item.itemName = itemName ?? item.itemName
     }
     if (itemType)
     {
-        dbItem.itemType = item.itemType ?? dbItem.itemType
+        dbItem.itemType = itemType ?? dbItem.itemType
+        item.itemType = itemType ?? item.itemType
     }
     if (imageUrl)
     {
-        dbItem.imageUrl = item.imageUrl ?? dbItem.imageUrl
+        dbItem.imageUrl = imageUrl ?? dbItem.imageUrl
+        item.imageUrl = imageUrl ?? item.imageUrl
     }
     if (price)
     {
-        dbItem.price = item.price ?? dbItem.price
+        dbItem.price = price ?? dbItem.price
+        item.price = price ?? item.price
     }
     if (available)
     {
-        dbItem.available = item.available ?? dbItem.available
+        dbItem.available = available ?? dbItem.available
+        item.available = available ?? item.available
     }
     if (description)
     {
-        dbItem.description = item.description ?? dbItem.description
+        dbItem.description = description ?? dbItem.description
+        item.description = description ?? item.description
     }
 
     await dbItem.save()
-    console.log(dbItem)
+    
     res.json(dbItem)
 })
 
 
 
-
-
-
-
-
-
-
-
+// log in sign up end points
 
 app.post('/api/signUp', async (req, res) =>
 {
@@ -170,7 +176,7 @@ app.post('/api/logIn', async (req, res) =>
 {
     const {email, password} = req.body
 
-    let customer = await Customer.findOne({where: {email: email}, attributes: ['password']})
+    let customer = await Customer.findOne({where: {email: email}, attributes: ['password', "customerId"]})
 
     if (!customer)
     {
@@ -187,17 +193,17 @@ app.post('/api/logIn', async (req, res) =>
             {
                 if (await Customer.findOne({where: {email: 'doriussam@gmail.com', password: hash}}))
                 {
-                    res.json({message: "admin logged in"})
+                    res.json({message: "admin logged in",  id: customer.customerId})
                 }
                 // temp v
                 else if (await Customer.findOne({where: {email: 'x', password: hash}}))
                 {
-                    res.json({message: "admin logged in"})
+                    res.json({message: "admin logged in",  id: customer.customerId})
                 }
                 // temp ^
                 else if (await Customer.findOne({where: {email: email, password: hash}}))
                 {
-                    res.json({message: "user logged in"})
+                    res.json({message: "user logged in", id: customer.customerId})
                 }
             }
             else
@@ -210,6 +216,67 @@ app.post('/api/logIn', async (req, res) =>
     }
 
 })
+
+// shopping cart routes
+
+app.post('/api/cart/addItem/:id', async (req, res) =>
+{
+    let {id} = req.params
+    let {email} = req.body
+    
+    let user = await Customer.findOne({where: {email: email}, attributes: ["customerId"]})
+
+    console.log(user.customerId)
+
+    let newCartItem = await Cart.create({customerId: user.customerId, itemId: id})
+    
+})
+
+app.post('/api/cart/:id', async (req, res) =>
+{
+    let {id} = req.params
+    
+    let cart = await Cart.findAll({where: {customerId: id}, attributes: ["customerId", "itemId"]})
+
+    console.log(cart)
+
+    let cartItems = []
+
+    for (let i = 0; i < cart.length; i++)
+    {
+        cartItems.push(await Item.findOne({where: {itemId: cart[i].itemId}}))
+    }
+
+    console.log(cartItems)
+
+    res.json(cartItems)
+})
+
+app.post('/api/cart/items', async (req, res) =>
+{
+    let {customerId, itemId} = req.body
+
+    console.log(itemId)
+})
+
+app.post('/api/addCard', async (req, res) =>
+{
+    let {customerId, firstName, lastName, address, city, postalCode, cardNumber, nameOnCard, expDate, cvc} = req.body
+
+    let newCard = await Card.create({customerId: customerId, firstName: firstName, lastName: lastName, address: address, city: city, postalCode: postalCode, cardNumber: cardNumber, nameOnCard: nameOnCard, expDate: expDate, cvc: cvc})
+
+    res.json(newCard)
+})
+
+app.post('/api/deleteCart', async (req, res) =>
+{
+    let {customerId} = req.body
+
+    console.log(customerId)
+
+    await Cart.destroy({ where: {customerId: customerId}})
+})
+
 
 
 ViteExpress.listen(app, port, () => console.log('running'))

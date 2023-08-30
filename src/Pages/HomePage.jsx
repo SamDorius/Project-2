@@ -3,7 +3,7 @@ import ShoppingCart from "./ShoppingCart"
 import { Link } from "react-router-dom"
 import './HomePage.css'
 import { useState } from "react"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from "axios"
 import Products from "./Products"
 import { useEffect } from "react"
@@ -11,8 +11,12 @@ import { useEffect } from "react"
 
 export default function Home({items})
 {
+
+    const dispatch = useDispatch()
+
     const logInMessage = useSelector((state) => state.message)
     const userEmail = useSelector((state) => state.email)
+    const userId = useSelector((state) => state.userId)
 
     const [itemList, setItemList] = useState(items)
     const [isEditing, setIsEditing] = useState(false)
@@ -41,13 +45,23 @@ export default function Home({items})
 
         setItemList(newItemList)
     }
+
+    const getCart = async () =>
+    {
+        if (userId)
+        {
+            const {data} = await axios.post(`/api/cart/${userId}`)
+    
+            console.log(data)
+    
+            dispatch({'type': 'SET_CART', 'payload': data})
+        }
+    }
     
     
     const itemsDisplay = itemList.map((item) =>
     {
         const {itemId, itemName, itemType, price, available, description, imageUrl, isEditing} = item
-
-        console.log(itemId)
 
         return (
                 <Products item={{itemId, itemType, itemName, available, description, price, imageUrl, isEditing}} key={itemId} onDeleteClick={() => deleteItem(itemId)}/>
@@ -61,26 +75,23 @@ export default function Home({items})
             <div className="page">
                 <div className="topBar">
                     { logInMessage === '' && <Link className="link" to="/login">Log In</Link>}
-                    { logInMessage === 'user logged in' &&  <div>Signed in with the email: {userEmail}</div>}
-                    { logInMessage === 'admin logged in' &&  <div>You're the admin bro</div>}
-                    <Link className="link" to="/cart">Shopping Cart</Link>
-                    <h1 className="logo">LOGO GOES HERE</h1>
-                    <h2 className="searchBar">(Search Bar Will Go Here)</h2>
+                    { logInMessage === 'user logged in' &&  <div className="signedIn">Signed in with the email: {userEmail}</div>}
+                    { logInMessage === 'admin logged in' &&  <div className="signedIn">You're the admin bro</div>}
+                    <h1 className="logo">Sudo Vintage</h1>
+                    <Link onClick={getCart} className="link" to="/cart">Shopping Cart</Link>
                 </div>
 
                 { logInMessage !== 'admin logged in' &&
-                    <>
+                    <div className="products">
                         {itemsDisplay}
-                    </>
+                    </div>
                 }
 
                 { logInMessage === 'admin logged in' && 
-                    <>
-                        <div className="test">
+                        <div className="products">
                             {itemsDisplay}
                             <button onClick={addItem}>+</button>
                         </div>
-                    </>
                 }
 
 

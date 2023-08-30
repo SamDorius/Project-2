@@ -1,4 +1,4 @@
-import { Customer, Cart, Sale, Item, db  } from "./model.js"
+import { Customer, Cart, Sale, Item, Card, db  } from "./model.js"
 
 
 await db.sync({ force: true })
@@ -33,8 +33,15 @@ await Cart.bulkCreate
 await Sale.bulkCreate
 (
     [
-        {customerId: 1, itemId: 3, price: 300, date: 2023-2-13},
-        {customerId: 1, itemId: 2, price: 0, date: 2023-8-8}
+        {customerId: 1, itemId: 3, price: 300},
+        {customerId: 1, itemId: 2, price: 0}
+    ]
+)
+
+await Card.bulkCreate
+(
+    [
+        {customerId: 1, firstName: 'yeah', lastName: 'yeah', address: 'yeah', city: 'yeah', postalCode: 1, cardNumber: 2, nameOnCard: 'yeah', expDate: '12/23/04', cvc: 123}
     ]
 )
 

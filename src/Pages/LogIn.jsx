@@ -26,12 +26,17 @@ export default function LogIn()
         {
             dispatch({'type': 'SET_MESSAGE', 'payload': 'user logged in'})
             dispatch({'type': 'SET_EMAIL', 'payload': user.email})
+            dispatch({'type': 'SET_USER_ID', 'payload': data.id})
+
 
             navigate('/')
         }
         else if (data.message === "admin logged in")
         {
             dispatch({'type': "SET_MESSAGE", 'payload': 'admin logged in'})
+            dispatch({'type': 'SET_EMAIL', 'payload': user.email})
+            dispatch({'type': 'SET_USER_ID', 'payload': data.id})
+
 
             navigate('/')
         }
@@ -48,21 +53,27 @@ export default function LogIn()
     const logInMessage = useSelector((state) => state.message)
 
     return (
-        <>
+        <div className="logInPage">
             { logInMessage === 'account created' && <h1>Account Successfully Created,</h1>}
-            <div>
-                <h2>Log In</h2>
-                <label htmlFor="email">Email:</label>
-                <input onChange={(event) => {setEmail(event.target.value)}} type="text" id="email"/>
-                <label htmlFor="password">Password:</label>
-                <input onChange={(event) => {setPassword(event.target.value)}} type="text" id="password"/>
-                <input type="submit" onClick={ClickLogIn}/>
-                <Link className="link" to="/signup">Sign Up</Link>
-                <Link className="link" to="/">Return to Home Page</Link>
+            <div className="logInBox">
+                <h2 className="logInHeader">Log In</h2>
+                <div>
+                    <input onChange={(event) => {setEmail(event.target.value)}} type="text" id="email" placeholder="Email:"/>
+                </div>
+                <div>
+                    <input onChange={(event) => {setPassword(event.target.value)}} type="text" id="password" placeholder="Password:"/>
+                </div>
+                <div>
+                    <input type="submit" onClick={ClickLogIn}/>
+                </div>
+                <div className="links">
+                    <Link className="link" to="/signup">Don't have an account? Sign Up</Link>
+                    <Link className="link" to="/">Return to Home Page</Link>
+                </div>
             </div>
             { logInMessage === 'user not found' && <h1>User Not Found</h1>}
             { logInMessage === 'password was incorrect' && <h1>Incorrect Password</h1>}
-        </>
+        </div>
     )
 
 }

@@ -37,18 +37,24 @@ export default function SignUp()
     const signUpMessage = useSelector((state) => state.message)
 
     return (
-        <>
-            <div>
-                <h2>Sign Up</h2>
-                <label htmlFor="email">Email:</label>
-                <input onChange={(event) => {setEmail(event.target.value)}} type="text" id="email"/>
-                <label htmlFor="password">Password:</label>
-                <input onChange={(event) => {setPassword(event.target.value)}} type="text" id="password"/>
-                <input type="submit" onClick={ClickSignUp}/>
-                <Link className="link" to="/login">Already have an account? Log in</Link>
-                <Link className="link" to="/">Return to home page</Link>
+        <div className="logInPage">
+            <div className="logInBox">
+                <h2 className="logInHeader">Sign Up</h2>
+                <div>
+                    <input onChange={(event) => {setEmail(event.target.value)}} type="text" id="email" placeholder="Email:"/>
+                </div>
+                <div>
+                    <input onChange={(event) => {setPassword(event.target.value)}} type="text" id="password" placeholder="Password:"/>
+                </div>
+                <div>
+                    <input type="submit" onClick={ClickSignUp}/>
+                </div>
+                <div className="links">
+                    <Link className="link" to="/login">Already have an account? Log in</Link>
+                    <Link className="link" to="/">Return to home page</Link>
+                </div>
             </div>
             { signUpMessage === 'user already exists' && <h1>An Account Already Exists With That Email</h1>}
-        </>
+        </div>
     )
 }

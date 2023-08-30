@@ -136,11 +136,6 @@ Sale.init(
             autoIncrement: true,
             allowNull: false
         },
-        date:
-        {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
         price:
         {
             type: DataTypes.INTEGER,
@@ -149,6 +144,75 @@ Sale.init(
     },
     {
         modelName: "sale",
+        sequelize: db
+    }
+)
+
+export class Card extends Model 
+{
+    [util.inspect.custom]() 
+    {
+        return this.toJSON();
+    }
+}
+
+Card.init(
+    {
+        checkOutId: 
+        {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false
+        },
+        firstName:
+        {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
+        lastName:
+        {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
+        address:
+        {
+            type: DataTypes.STRING(200),
+            allowNull: false
+        },
+        city:
+        {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
+        postalCode:
+        {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        cardNumber:
+        {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        nameOnCard:
+        {
+            type: DataTypes.STRING(200),
+            allowNull: false
+        },
+        expDate:
+        {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
+        cvc:
+        {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
+    },
+    {
+        modelName: "checkout",
         sequelize: db
     }
 )
@@ -169,5 +233,8 @@ Sale.belongsTo(Customer, { foreignKey: "customerId" })
 
 Item.hasMany(Sale, { foreignKey: "itemId" })
 Sale.belongsTo(Item, { foreignKey: "itemId" })
+
+Customer.hasMany(Card, { foreignKey: "customerId" })
+Card.belongsTo(Customer, { foreignKey: "customerId" })
 
 export default db
