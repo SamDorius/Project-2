@@ -219,6 +219,22 @@ app.post('/api/logIn', async (req, res) =>
 
 // shopping cart routes
 
+app.post('/api/cart/removeItem/:id', async (req, res) =>
+{
+    let {id} = req.params
+    let {email} = req.body
+
+    let user = await Customer.findOne({where: {email: email}, attributes: ["customerId"]})
+
+    let item = await Cart.findOne({where: {itemId: id}})
+
+    console.log(item)
+    
+    await item.destroy()
+
+    res.json(item)
+})
+
 app.post('/api/cart/addItem/:id', async (req, res) =>
 {
     let {id} = req.params
@@ -230,6 +246,7 @@ app.post('/api/cart/addItem/:id', async (req, res) =>
 
     let newCartItem = await Cart.create({customerId: user.customerId, itemId: id})
     
+    res.json(newCartItem)
 })
 
 app.post('/api/cart/:id', async (req, res) =>
@@ -263,9 +280,17 @@ app.post('/api/addCard', async (req, res) =>
 {
     let {customerId, firstName, lastName, address, city, postalCode, cardNumber, nameOnCard, expDate, cvc} = req.body
 
-    let newCard = await Card.create({customerId: customerId, firstName: firstName, lastName: lastName, address: address, city: city, postalCode: postalCode, cardNumber: cardNumber, nameOnCard: nameOnCard, expDate: expDate, cvc: cvc})
+    try 
+    {
+        let newCard = await Card.create({customerId: customerId, firstName: firstName, lastName: lastName, address: address, city: city, postalCode: postalCode, cardNumber: cardNumber, nameOnCard: nameOnCard, expDate: expDate, cvc: cvc})
 
-    res.json(newCard)
+        res.json(newCard)
+    }
+    catch (error)
+    {
+        res.json("someone made an oopsies")
+    }
+
 })
 
 app.post('/api/deleteCart', async (req, res) =>

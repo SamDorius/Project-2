@@ -7,7 +7,7 @@ import { useState } from "react"
 export default function ShoppingCart()
 {
     const userId = useSelector((state) => state.userId)
-    const cart = useSelector((state) => state.cart)
+    let cart = useSelector((state) => state.cart)
     const email = useSelector((state) => state.email)
 
     const dispatch = useDispatch()
@@ -16,25 +16,49 @@ export default function ShoppingCart()
     let itemsArr = []
     let pastItems = []
     let totalPrice = 0
-
+    
     const clickCheckOut = () =>
     {
         dispatch({'type': 'SET_TOTAL', 'payload': totalPrice})
     }
-
+    
     const increaseQuantity = async (itemId) =>
     {
-        console.log(itemId)
         const user = {email: email}
 
+        for (let i = 0; i < cart.length; i++)
+        {
+            if (itemId === cart[i].itemId)
+            {
+                const newItem = cart[i]
+                dispatch({'type': 'SET_CART', 'payload': [...cart, structuredClone(newItem)]})
+                break;
+            }
+
+        }
+
         let {data} = await axios.post(`/api/cart/addItem/${itemId}`, user)
-        itemsArr[itemId] += 1
+        console.log(data)
     }
+
 
     const decreaseQuantity = async (itemId) =>
     {
-        console.log(itemId)
+       const user = {email: email}
+
+       for (let i = 0; i < cart.length; i++) {
+        if (itemId == cart[i].itemId) {
+            
+            dispatch({'type': 'SET_CART', 'payload': [...cart.slice(0, i), ...cart.slice(i + 1)]})
+            break;
+        }
+       }
+
+
+       let {data} = await axios.post(`/api/cart/removeItem/${itemId}`, user)
+       console.log(data)
     }
+
     
     return (
         <div className="cart">
@@ -91,7 +115,6 @@ export default function ShoppingCart()
                                 lastItem = item
                             }
                         })}
-                        
                     </div>
                     <div>{pastItems.map((item) =>
                     {

@@ -32,7 +32,9 @@ export default function CheckOut()
 
         const {data} = await axios.post('/api/addCard', card)
 
-        if (data)
+        console.log(data)
+
+        if (data !== "someone made an oopsies")
         {
             dispatch({'type': 'SET_DISPLAY', 'payload': 'done'})
             const id = {customerId: customerId}

@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300&family=Raleway&family=Rubik&display=swap');
 
 .topBar
 {
@@ -17,7 +19,7 @@
 {
     margin-left: 0px;
     margin-right: 0px;
-    font-family: 'Raleway';
+    font-family: 'Rubik';
 }
 
 .logo
