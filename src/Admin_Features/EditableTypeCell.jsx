@@ -2,7 +2,7 @@
 export default function EditableTypeCell({type, onValueChange, isEditing})
 {
     return isEditing ? (
-        <div>
+        <div className="editRow">
             <label htmlFor="type">Type: </label>
             <input type="text" value={type} onChange={(e) => onValueChange(e.target.value)} />
         </div>

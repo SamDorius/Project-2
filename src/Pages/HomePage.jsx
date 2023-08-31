@@ -90,7 +90,7 @@ export default function Home({items})
                 { logInMessage === 'admin logged in' && 
                         <div className="products">
                             {itemsDisplay}
-                            <button onClick={addItem}>+</button>
+                            <button className="addButton" onClick={addItem}>+</button>
                         </div>
                 }
 

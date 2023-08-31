@@ -2,7 +2,7 @@
 export default function EditablePriceCell({price, isEditing, onValueChange})
 {
     return isEditing ? (
-        <div>
+        <div className="editRow">
             <label htmlFor="price">Price: </label>
             <input type="number" value={price} onChange={(e) => onValueChange(e.target.value)} />
         </div>

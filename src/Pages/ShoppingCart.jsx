@@ -8,6 +8,7 @@ export default function ShoppingCart()
 {
     const userId = useSelector((state) => state.userId)
     const cart = useSelector((state) => state.cart)
+    const email = useSelector((state) => state.email)
 
     const dispatch = useDispatch()
 
@@ -19,6 +20,20 @@ export default function ShoppingCart()
     const clickCheckOut = () =>
     {
         dispatch({'type': 'SET_TOTAL', 'payload': totalPrice})
+    }
+
+    const increaseQuantity = async (itemId) =>
+    {
+        console.log(itemId)
+        const user = {email: email}
+
+        let {data} = await axios.post(`/api/cart/addItem/${itemId}`, user)
+        itemsArr[itemId] += 1
+    }
+
+    const decreaseQuantity = async (itemId) =>
+    {
+        console.log(itemId)
     }
     
     return (
@@ -89,7 +104,12 @@ export default function ShoppingCart()
                                     <h3>{itemName}</h3>
                                     <img className="tee" src={imageUrl}/>
                                     <h3>${price}</h3>
-                                    <div>Quantity: {itemsArr[itemId]}</div>
+                                    <div className="quantity">
+                                        <h3>Quantity: {itemsArr[itemId]}</h3>
+                                        <button onClick={() => increaseQuantity(itemId)}>+</button>
+                                        <button onClick={() => decreaseQuantity(itemId)}>-</button>
+                                    </div>
+                                    
                                 </div>
                             )
                         }

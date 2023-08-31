@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit'
 
 let initalState = {message: ''}
 
-
 const reducer = (state = initalState, action) =>
 {
     switch(action.type)

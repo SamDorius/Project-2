@@ -2,7 +2,7 @@
 export default function EditableNameCell({name, isEditing, onValueChange})
 {
     return isEditing ? (
-        <div>
+        <div className="editRow">
             <label htmlFor="name">Product Name: </label>
             <input type="text" value={name} onChange={(e) => onValueChange(e.target.value)}/>
         </div>

@@ -249,3 +249,57 @@ footer
     padding-right: 20px;
     margin-top: 10px;
 }
+
+.editButton
+{
+    border: 5px solid black;
+    border-radius: 3rem;
+    background-color: #FFFFF3;
+    color: #332C23;
+    font-size: 18px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.editRow
+{
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.addButton
+{
+    height: 50px;
+    width: 50px;
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: 1rem;
+    border: 3px solid #332C23;
+    color: #FFFFF3;
+    background-color: #332C23;
+    font-size: 30px;
+}
+
+.quantity
+{
+    display: flex;
+    flex-flow: row;
+    margin-left: 75px;
+}
+
+.quantity > button
+{
+    margin-left: 10px;
+    height: 25px;
+    width: 25px;
+    margin-top: 20px;
+    background-color: #332C23;
+    color: #FFFFF3;
+    border: 2px solid #FFFFF3;
+    border-radius: 0.5rem;
+}
+
+.quantity > h3
+{
+    margin-right: 15px;
+}

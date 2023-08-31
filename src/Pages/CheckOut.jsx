@@ -28,11 +28,9 @@ export default function CheckOut()
 
     const clickCheckOut = async () =>
     {
-        console.log('why')
-
         const card = {customerId: customerId, firstName: firstName, lastName: lastName, address: address, city: city, postalCode: postalCode, cardNumber: cardNumber, nameOnCard: nameOnCard, expDate: expDate, cvc: cvc}
 
-        `const {data} = await axios.post('/api/addCard', card)`
+        const {data} = await axios.post('/api/addCard', card)
 
         if (data)
         {

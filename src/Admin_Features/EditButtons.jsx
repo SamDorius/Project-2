@@ -4,14 +4,14 @@ export default function EditButtons({isEditing, deleteClick, onSaveClick, onEdit
     return isEditing ? (
         <>
             <div>
-                <button onClick={onSaveClick}>Save</button>
+                <button className="editButton" onClick={onSaveClick}>Save</button>
             </div>
         </>
     ) : (
         <>
             <div>
-                <button onClick={onEditClick}>Edit</button>
-                <button onClick={deleteClick}>Delete</button>
+                <button className="editButton" onClick={onEditClick}>Edit</button>
+                <button className="editButton" onClick={deleteClick}>Delete</button>
             </div>
         </>
     )
